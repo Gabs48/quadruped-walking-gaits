@@ -15,7 +15,7 @@ class Graph:
     
     
     def showGraph(self):
-        self.posGraph = v.graph.gdisplay(x=const.windowWidth+230, y=0, width=220, height=const.windowHeight,
+        self.posGraph = v.graph.gdisplay(x=0, y=const.windowHeight, width=const.windowWidth, height=200,
                           title='Position', xmax=100., xmin=-100., ymax=self.yMax, ymin=0.)
         self.x_pos = None
         self.y_pos = None
