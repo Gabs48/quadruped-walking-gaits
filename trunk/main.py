@@ -268,7 +268,7 @@ def normalMode():
 
 def GUImode():
 	root = Tkinter.Tk()
-	root.geometry('200x300+800+300')
+	root.geometry('200x650+1050+0')
 	sim = Simulation()
 	thread.start_new_thread(sim.startLoop,())
 	app = tkWindow(root, sim)

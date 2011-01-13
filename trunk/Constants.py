@@ -27,7 +27,7 @@ femurLength = 0.50
 femurWidth = 1.5
 femurHeight = 0.50
 
-tibiaLength = 1.0
+tibiaLength = 0.5
 tibiaWidth = 0.5
 tibiaHeight = 2.0
 

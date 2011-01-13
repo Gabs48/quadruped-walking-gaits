@@ -19,6 +19,12 @@ class Robot:
         self.world = world
         self.space = space
         self.density = density
+        self.femurHeight = const.femurHeight
+        self.femurWidth = const.femurWidth
+        self.femurLength = const.femurLength
+        self.tibiaHeight = const.tibiaHeight
+        self.tibiaWidth = const.tibiaWidth
+        self.tibiaLength = const.tibiaLength
         self.densityFemur = 10
         self.densityTibia = 10
         self.FMax = 10000
@@ -29,6 +35,8 @@ class Robot:
         self.joints = []
         self.check = 0
         self.centerRobot = True
+        self.minDeg = const.minDeg
+        self.maxDeg = const.maxDeg
         # means how many percent of the body do have the density
         # like human body where only 90% is water
         self.bodyCoverage = 1.0
@@ -42,16 +50,16 @@ class Robot:
         self.tibia = [] # body
         
         for i in range(const.numLegs):
-            tmpFemur = self.createBody(const.femurLength,
-                                       const.femurHeight,
-                                       const.femurWidth,
+            tmpFemur = self.createBody(self.femurLength,
+                                       self.femurHeight,
+                                       self.femurWidth,
                                        self.densityFemur)
             self.femur.append(tmpFemur)
             
         for i in range(const.numLegs):
-            tmpTibia = self.createBody(const.tibiaLength,
-                                       const.tibiaHeight,
-                                       const.tibiaWidth,
+            tmpTibia = self.createBody(self.tibiaLength,
+                                       self.tibiaHeight,
+                                       self.tibiaWidth,
                                        self.densityTibia)
             self.tibia.append(tmpTibia)       
                                                     
@@ -96,12 +104,12 @@ class Robot:
             
             tX = const.bodyLength/2
             tY = const.bodyHeight/2+const.Height
-            tZ = const.bodyWidth/2+const.femurWidth/2#+const.tibiaWidth/2
+            tZ = const.bodyWidth/2+self.femurWidth/2#+const.tibiaWidth/2
             if i  == 0:
                 self.addHingeJoint(self.femur[i], self.body,
                                              (fX, fY, fZ),
                                               (0, -1, 0), -0,
-                                              const.minDeg, const.maxDeg)
+                                              self.minDeg, self.maxDeg)
                 self.addHingeJoint(self.tibia[i], self.femur[i],
                                              (tX, tY, tZ),
                                              (1, 0, 0), const.maxAngle, -0.01, 0.4)
@@ -109,7 +117,7 @@ class Robot:
                 self.addHingeJoint(self.femur[i], self.body,
                                              (-fX, fY, fZ),
                                               (0, -1, 0), 0,
-                                              const.maxDeg, const.minDeg)
+                                              self.maxDeg, self.minDeg)
                 self.addHingeJoint(self.tibia[i], self.femur[i],
                                              (-tX, tY, tZ),
                                              (1, 0, 0), const.maxAngle, -0.01, 0.4)
@@ -117,7 +125,7 @@ class Robot:
                 self.addHingeJoint(self.femur[i], self.body,
                                              (-fX, fY, -fZ),
                                              (0, -1, 0), -const.maxAngle,
-                                             const.minDeg, const.maxDeg)
+                                             self.minDeg, self.maxDeg)
                 self.addHingeJoint(self.tibia[i], self.femur[i],
                                              (-tX, tY, -tZ),
                                              (-1, 0, 0), const.maxAngle, -0.01, 0.4)
@@ -125,7 +133,7 @@ class Robot:
                 self.addHingeJoint(self.femur[i], self.body,
                                              (fX, fY, -fZ),
                                              (0, -1, 0), const.maxAngle,
-                                             const.maxDeg, const.minDeg)
+                                             self.maxDeg, self.minDeg)
                 self.addHingeJoint(self.tibia[i], self.femur[i],
                                              (tX, tY, -tZ),
                                              (-1, 0, 0), const.maxAngle, -0.01)
@@ -184,7 +192,7 @@ class Robot:
         '''Drops the legs of the robot'''
         fX = const.bodyLength/2
         fY = const.bodyHeight/2+const.Height
-        fZ = const.bodyWidth/2+const.femurWidth/2
+        fZ = const.bodyWidth/2+self.femurWidth/2
         
         i=0
         for leg in self.femur:
@@ -200,8 +208,8 @@ class Robot:
             
         i=0
         fX = const.bodyLength/2
-        fY = const.bodyHeight/2-const.femurHeight/2-const.tibiaHeight/2+const.Height
-        fZ = const.bodyWidth/2+const.femurWidth+const.tibiaWidth/2
+        fY = const.bodyHeight/2-self.femurHeight/2-self.tibiaHeight/2+const.Height
+        fZ = const.bodyWidth/2+self.femurWidth+self.tibiaWidth/2
         for leg in self.tibia:
             if i == 0:
                 leg.setPosition((fX, fY, fZ))
@@ -297,23 +305,52 @@ class Robot:
         '''Sets the density of the robot, considering the percentage it is
            covered with the material''' 
         self.density = (float(val)*self.bodyCoverage)
-        self.dropAgain()
         
     
     def setFemurDensity(self, val):
         '''Sets the density of the femur, considering the percentage it is
            covered with the material''' 
         self.femurDensity = (float(val)*self.bodyCoverage)
-        self.dropAgain()
         
         
     def setTibiaDensity(self, val):
         '''Sets the density of the tibia, considering the percentage it is
            covered with the material''' 
         self.tibiaDensity = (float(val)*self.bodyCoverage)
-        self.dropAgain() 
         
     
+    def setFemurLength(self, val):
+        self.femurHeight = float(val)
+
+
+    def setFemurHeight(self, val):
+        self.femurHeight = float(val)
+    
+    
+    def setFemurWidth(self, val):
+        self.femurWidth = float(val)
+        
+ 
+    def setTibiaLength(self, val):
+        self.tibiaLength = float(val)
+
+
+    def setTibiaHeight(self, val):
+        self.tibiaHeight = float(val)
+    
+    
+    def setTibiaWidth(self, val):
+        self.tibiaWidth = float(val)
+    
+    
+    def setMinDeg(self, val):
+        self.minDeg = float(val)
+    
+    
+    def setMaxDeg(self, val):
+        self.maxDeg = float(val)
+        
+        
     def setBodyCoverage(self, val):
         '''Percentage of the body using the material'''
         self.bodyCoverage = float(val)
@@ -339,17 +376,18 @@ class Robot:
         self.bodyExist = False
         self.check = 0
         self.totalMass = 0.0
+
         for b in self.body.GetElementKeys():
             self.body.RemoveElement(b)
-        
+
         for leg in self.femur:
             for b in leg.GetElementKeys():
                 leg.RemoveElement(b)
-            
+  
         for leg in self.tibia:
             for b in leg.GetElementKeys():
                 leg.RemoveElement(b)
-                
+       
         self.removeJointVisuals()
         self.dropRobot()
         

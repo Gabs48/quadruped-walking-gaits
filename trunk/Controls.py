@@ -25,13 +25,129 @@ class tkWindow:
         frameRobot = tk.LabelFrame(master, text='Robot')
         frameRobot.pack(fill='both', expand='yes')
         
-        frameMotion = tk.LabelFrame(master, text='Motion')
-        frameMotion.pack(fill='both', expand='yes')
+        #frameMotion = tk.LabelFrame(master, text='Motion')
+        #frameMotion.pack(fill='both', expand='yes')
+        
+        frameFemur = tk.LabelFrame(master, text='Femur (m)')
+        frameFemur.pack(fill='both', expand='yes')
+
+        frameTibia = tk.LabelFrame(master, text='Tibia (m)')
+        frameTibia.pack(fill='both', expand='yes')
 
         self.setupWindowProps(frameWindow)
         self.setupWorldProps(frameWorld)
         self.setupRobotProps(frameRobot)
+        self.setupFemurProps(frameFemur)
+        self.setupTibiaProps(frameTibia)
         #self.setupMotionProps(frameMotion)
+ 
+ 
+    def setupFemurProps(self, root):
+        lengthFrame = tk.Frame(root)
+        lengthFrame.pack(side=tk.TOP)
+        
+        labelLength = tk.Label(lengthFrame, text='Length: ')
+        scaleLength = tk.Scale(lengthFrame, orient=tk.HORIZONTAL,
+                               from_=0.1, to=5.0, resolution=0.1,
+                               command=self.sim.cRobot.setFemurLength,
+                               length=const.tkCtrlLength, showvalue=1 )
+        
+        labelLength.pack(side=tk.LEFT)
+        scaleLength.pack(side=tk.LEFT)
+        scaleLength.set(const.femurLength)
+
+        heightFrame = tk.Frame(root)
+        heightFrame.pack(side=tk.TOP)
+        
+        labelHeight = tk.Label(heightFrame, text='Height: ')
+        scaleHeight = tk.Scale(heightFrame, orient=tk.HORIZONTAL,
+                               from_=0.1, to=5.0, resolution=0.1,
+                               command=self.sim.cRobot.setFemurHeight,
+                               length=const.tkCtrlLength, showvalue=1 )
+        
+        labelHeight.pack(side=tk.LEFT)
+        scaleHeight.pack(side=tk.LEFT)
+        scaleHeight.set(const.femurHeight)
+        
+        widthFrame = tk.Frame(root)
+        widthFrame.pack(side=tk.TOP)
+        
+        labelWidth = tk.Label(widthFrame, text='Width: ')
+        scaleWidth = tk.Scale(widthFrame, orient=tk.HORIZONTAL,
+                               from_=0.1, to=5.0, resolution=0.1,
+                               command=self.sim.cRobot.setFemurWidth,
+                               length=const.tkCtrlLength, showvalue=1 )
+        
+        labelWidth.pack(side=tk.LEFT)
+        scaleWidth.pack(side=tk.LEFT)
+        scaleWidth.set(const.femurWidth)
+        
+        degFrame = tk.Frame(root)
+        degFrame.pack(side=tk.TOP)
+        
+        labelMaxDeg = tk.Label(degFrame, text='Max Degree: ')
+        scaleMaxDeg = tk.Scale(degFrame, orient=tk.HORIZONTAL,
+                               from_=0.01, to=1.0, resolution=0.01,
+                               command=self.sim.cRobot.setMaxDeg,
+                               length=const.tkCtrlLength, showvalue=1 )
+        
+        labelMaxDeg.pack(side=tk.LEFT)
+        scaleMaxDeg.pack(side=tk.LEFT)
+        scaleMaxDeg.set(const.maxDeg)
+    
+        degMFrame = tk.Frame(root)
+        degMFrame.pack(side=tk.TOP)
+        
+        labelMinDeg = tk.Label(degMFrame, text='Min Deegree: ')
+        scaleMinDeg = tk.Scale(degMFrame, orient=tk.HORIZONTAL,
+                               from_=0.01, to=1.0, resolution=0.01,
+                               command=self.sim.cRobot.setMinDeg,
+                               length=const.tkCtrlLength, showvalue=1 )
+        
+        labelMinDeg.pack(side=tk.LEFT)
+        scaleMinDeg.pack(side=tk.LEFT)
+        scaleMinDeg.set(const.minDeg)
+ 
+    def setupTibiaProps(self, root):
+        lengthFrame = tk.Frame(root)
+        lengthFrame.pack(side=tk.TOP)
+        
+        labelLength = tk.Label(lengthFrame, text='Length: ')
+        scaleLength = tk.Scale(lengthFrame, orient=tk.HORIZONTAL,
+                               from_=0.1, to=5.0, resolution=0.1,
+                               command=self.sim.cRobot.setTibiaLength,
+                               length=const.tkCtrlLength, showvalue=1 )
+        
+        labelLength.pack(side=tk.LEFT)
+        scaleLength.pack(side=tk.LEFT)
+        scaleLength.set(const.tibiaLength)
+
+        heightFrame = tk.Frame(root)
+        heightFrame.pack(side=tk.TOP)
+        
+        labelHeight = tk.Label(heightFrame, text='Height: ')
+        scaleHeight = tk.Scale(heightFrame, orient=tk.HORIZONTAL,
+                               from_=0.1, to=5.0, resolution=0.1,
+                               command=self.sim.cRobot.setTibiaHeight,
+                               length=const.tkCtrlLength, showvalue=1 )
+        
+        labelHeight.pack(side=tk.LEFT)
+        scaleHeight.pack(side=tk.LEFT)
+        scaleHeight.set(const.tibiaHeight)
+        
+        widthFrame = tk.Frame(root)
+        widthFrame.pack(side=tk.TOP)
+        
+        labelWidth = tk.Label(widthFrame, text='Width: ')
+        scaleWidth = tk.Scale(widthFrame, orient=tk.HORIZONTAL,
+                               from_=0.1, to=5.0, resolution=0.1,
+                               command=self.sim.cRobot.setTibiaWidth,
+                               length=const.tkCtrlLength, showvalue=1 )
+        
+        labelWidth.pack(side=tk.LEFT)
+        scaleWidth.pack(side=tk.LEFT)
+        scaleWidth.set(const.tibiaWidth)
+ 
     
     def setupMotionProps(self, root):
         mainFrame = tk.Frame(root)
@@ -82,8 +198,10 @@ class tkWindow:
         centerFrame.pack(side=tk.BOTTOM)
         
         self.densityVal = tk.StringVar()
-        self.densityVal.set('Maple') # initial value
-        dropDensity = tk.OptionMenu(topFrame, self.densityVal, 'Iron', 'Maple', 'Plastic', 'Carbon', 'Gold', 'Bamboo')
+        self.densityVal.set('Iron') # initial value
+        dropDensity = tk.OptionMenu(topFrame, self.densityVal,
+                                    'Iron', 'Maple', 'Plastic',
+                                    'Carbon', 'Gold', 'Bamboo')
         labelDensity = tk.Label(topFrame, text='Density: ')
         buttonDensity = tk.Button(topFrame, text='Set', command=self.setDensity)
         
@@ -123,7 +241,8 @@ class tkWindow:
         
         self.gravityVal = tk.StringVar()
         self.gravityVal.set('Earth') # initial value
-        dropGravity = tk.OptionMenu(topFrame, self.gravityVal, 'Earth', 'Moon', 'Venus', 'Jupiter', 'Mars')
+        dropGravity = tk.OptionMenu(topFrame, self.gravityVal,
+                                    'Earth', 'Moon', 'Venus', 'Jupiter', 'Mars')
         labelGravity = tk.Label(topFrame, text='Gravity: ')
         buttonGravity = tk.Button(topFrame, text='Set', command=self.setGravity)
         
@@ -196,8 +315,19 @@ class tkWindow:
         
         
     def setDensity(self):
-        print "value is", self.densityVal.get()        
-    
+        if self.densityVal.get() == 'Iron':
+            self.sim.cRobot.setDensity(7874)
+        elif self.densityVal.get() == 'Maple':
+            self.sim.cRobot.setDensity(755)
+        elif self.densityVal.get() == 'Plastic':
+            self.sim.cRobot.setDensity(1350)
+        elif self.densityVal.get() == 'Carbon':
+            self.sim.cRobot.setDensity(2260)
+        elif self.densityVal.get() == 'Gold':
+            self.sim.cRobot.setDensity(19300)
+        elif self.densityVal.get() == 'Bamboo':
+            self.sim.cRobot.setDensity(400)
+            
     
     def setMotion(self):
         print "value is", self.motionVal.get()
