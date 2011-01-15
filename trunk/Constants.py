@@ -41,7 +41,7 @@ maxAngle = 90
 
 maxSize = 150
 
-Height = 3.00
+Height = 6.00
 
 '''
 def hello():
