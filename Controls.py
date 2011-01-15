@@ -43,6 +43,22 @@ class tkWindow:
  
  
     def setupFemurProps(self, root):
+        densityFrame = tk.Frame(root)
+        densityFrame.pack(side=tk.TOP)
+        
+        self.densityFemurVal = tk.StringVar()
+        self.densityFemurVal.set('Iron') # initial value
+        dropDensity = tk.OptionMenu(densityFrame, self.densityFemurVal,
+                                    'Iron', 'Maple', 'Plastic',
+                                    'Carbon', 'Gold', 'Bamboo')
+        labelDensity = tk.Label(densityFrame, text='Density: ')
+        buttonDensity = tk.Button(densityFrame, text='Set', command=self.setFemurDensity)
+        
+        labelDensity.pack(side=tk.LEFT)
+        dropDensity.pack(side=tk.LEFT)
+        buttonDensity.pack(side=tk.LEFT)
+        
+        
         lengthFrame = tk.Frame(root)
         lengthFrame.pack(side=tk.TOP)
         
@@ -109,6 +125,21 @@ class tkWindow:
         scaleMinDeg.set(const.minDeg)
  
     def setupTibiaProps(self, root):
+        densityFrame = tk.Frame(root)
+        densityFrame.pack(side=tk.TOP)
+        
+        self.densityTibiaVal = tk.StringVar()
+        self.densityTibiaVal.set('Iron') # initial value
+        dropDensity = tk.OptionMenu(densityFrame, self.densityTibiaVal,
+                                    'Iron', 'Maple', 'Plastic',
+                                    'Carbon', 'Gold', 'Bamboo')
+        labelDensity = tk.Label(densityFrame, text='Density: ')
+        buttonDensity = tk.Button(densityFrame, text='Set', command=self.setTibiaDensity)
+        
+        labelDensity.pack(side=tk.LEFT)
+        dropDensity.pack(side=tk.LEFT)
+        buttonDensity.pack(side=tk.LEFT)
+        
         lengthFrame = tk.Frame(root)
         lengthFrame.pack(side=tk.TOP)
         
@@ -328,6 +359,36 @@ class tkWindow:
         elif self.densityVal.get() == 'Bamboo':
             self.sim.cRobot.setDensity(400)
             
+            
+    def setTibiaDensity(self):
+        if self.densityTibiaVal.get() == 'Iron':
+            self.sim.cRobot.setTibiaDensity(7874)
+        elif self.densityTibiaVal.get() == 'Maple':
+            self.sim.cRobot.setTibiaDensity(755)
+        elif self.densityTibiaVal.get() == 'Plastic':
+            self.sim.cRobot.setTibiaDensity(1350)
+        elif self.densityTibiaVal.get() == 'Carbon':
+            self.sim.cRobot.setTibiaDensity(2260)
+        elif self.densityTibiaVal.get() == 'Gold':
+            self.sim.cRobot.setTibiaDensity(19300)
+        elif self.densityTibiaVal.get() == 'Bamboo':
+            self.sim.cRobot.setTibiaDensity(400)
+            
+            
+    def setFemurDensity(self):
+        if self.densityFemurVal.get() == 'Iron':
+            self.sim.cRobot.setFemurDensity(7874)
+        elif self.densityFemurVal.get() == 'Maple':
+            self.sim.cRobot.setFemurDensity(755)
+        elif self.densityFemurVal.get() == 'Plastic':
+            self.sim.cRobot.setFemurDensity(1350)
+        elif self.densityFemurVal.get() == 'Carbon':
+            self.sim.cRobot.setFemurDensity(2260)
+        elif self.densityFemurVal.get() == 'Gold':
+            self.sim.cRobot.setFemurDensity(19300)
+        elif self.densityFemurVal.get() == 'Bamboo':
+            self.sim.cRobot.setFemurDensity(400)
+            
     
     def setMotion(self):
         print "value is", self.motionVal.get()
@@ -357,7 +418,7 @@ class ControlWindow:
                                               y=0, width=220, height=scene.height/2,
                                               range=100)
         self.setupButtons()
-        #self.setupSliders()
+        self.setupSliders()
         #self.setupDropbox()
         self.setupLabels()
         #self.setupToggle()
@@ -365,19 +426,19 @@ class ControlWindow:
         
         
     def setupButtons(self):
-        self.bPush = visual.controls.button(pos=(0,0,0), width=const.ctrlsWidth,
+        self.bPush = visual.controls.button(pos=(0,50,0), width=const.ctrlsWidth,
                                height=24, text='Push', action=None )
         self.bRestart = visual.controls.button(pos=(0,25,0), width=const.ctrlsWidth,
                                height=24, text='Restart', action=None )
         
-        self.bBack = visual.controls.button(pos=(0,-50,0), width=const.ctrlsWidth-60,
-                                   height=24, text='B', action=lambda: self.robot.moveBackward() )
-        self.bForward = visual.controls.button(pos=(0,-25,0), width=const.ctrlsWidth-60,
-                                   height=24, text='F', action=lambda: self.robot.moveForward() )
-        self.bLeft = visual.controls.button(pos=(-30,-25,0), width=const.ctrlsWidth-60,
-                                   height=24, text='L', action=lambda: self.robot.turnLeft() )
-        self.bRight = visual.controls.button(pos=(30,-25,0), width=const.ctrlsWidth-60,
-                                   height=24, text='R', action=lambda: self.robot.turnRight() )
+        self.bMotion1 = visual.controls.button(pos=(0,0,0), width=const.ctrlsWidth,
+                                   height=24, text='Motion 1', action=lambda: self.robot.moveForward() )
+        self.bMotion2 = visual.controls.button(pos=(0,-25,0), width=const.ctrlsWidth,
+                                   height=24, text='Motion 2', action=lambda: self.robot.moveForward() )
+        self.bMotion3 = visual.controls.button(pos=(0,-50,0), width=const.ctrlsWidth,
+                                   height=24, text='Motion 3', action=lambda: self.robot.turnLeft() )
+        self.bMotion4 = visual.controls.button(pos=(0,-75,0), width=const.ctrlsWidth,
+                                   height=24, text='Motion 4', action=lambda: self.robot.turnRight() )
         
         
     def setupToggle(self):
@@ -406,8 +467,13 @@ class ControlWindow:
             self.centerRobot = True
             
         
-    def setupSliders(self):      
-        self.sColor = visual.controls.slider(pos=(-40,-100), width=const.sliderWidth,
+    def setupSliders(self):
+        self.sTimeInterval = visual.controls.slider(pos=(-40,75), width=const.sliderWidth,
+                               length=const.ctrlsWidth, axis=(1,0,0), min= 0.1, max= 5.0,
+                               action=lambda: self.setTime(self.sTimeInterval.value))
+        
+        self.sTimeInterval.value = self.robot.time
+        '''self.sColor = visual.controls.slider(pos=(-40,-100), width=const.sliderWidth,
                                length=const.ctrlsWidth, axis=(1,0,0), min= 0.0, max= 1.0,
                                action=lambda: self.setBackgroundColor(self.sColor.value))
         
@@ -429,7 +495,7 @@ class ControlWindow:
                                length=const.ctrlsWidth, axis=(1,0,0), min= 0.01, max= 5000.0,
                                action=lambda: self.world.setFloorGrip(self.sFloor.value))
         
-        self.sFloor.value = self.world.returnMu()
+        self.sFloor.value = self.world.returnMu()'''
         
         
     def setBackgroundColor(self, val):
@@ -467,3 +533,6 @@ class ControlWindow:
         # After to assign the actions after the robot instance has been created
         self.bPush.action = lambda: cRobot.pushRobot()
         self.bRestart.action = lambda: cRobot.dropAgain()
+        
+    def setTime(self, val):
+        self.robot.time = val

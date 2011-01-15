@@ -11,11 +11,14 @@ from Robot import Robot
 from Controls import ControlWindow, tkWindow
 import Constants as const
 import Grid
+import Environment as e
+import random
 
 class Simulation:
     
     def __init__(self):
         '''Uses VPython to visualize, manipulate and simulate the Quadruped live.'''
+        self.bodies = []
         self.cWorld = myWorld()
         self.createUI(self.cWorld.world._getScene())
         
@@ -26,8 +29,13 @@ class Simulation:
         
         self.dt = 1.0/const.framerate
         self.refresh = 0
+        
+        self.bodies.append(e.drop_object(self.cWorld.world))
     
     def startLoop(self):
+        itemcount = 0
+        count = random.uniform(10,50)
+        random.seed()
         while(1):
             visual.rate(const.framerate) # Frame rate
             
@@ -37,6 +45,22 @@ class Simulation:
             # do multiple simulation steps per frame to prevent jittering due to
             # 'small' collisions
             n = 10
+            
+            if itemcount < count:
+                itemcount += 1
+                self.bodies.append(e.drop_object(self.cWorld.world))
+            #elif itemcount >= count and itemcount <= (count+4):
+            #    for b in self.bodies:
+            #        b.addForce([1000000, 1000000, 10000])
+                    
+            itemcount+=1
+            
+            if itemcount == 500:
+                itemcount = 0
+                for b in self.bodies:
+                    for body in b.GetElementKeys():
+                        b.RemoveElement(body)
+                self.bodies = []
         
             for i in range(n):           
                 # Simulation step
@@ -53,6 +77,9 @@ class Simulation:
                         
                     for leg in self.cRobot.femur:
                         leg.UpdateDisplay()
+                        
+                    for b in self.bodies:
+                        b.UpdateDisplay()
                         
     def setupWindow(self, scene):
         scene.title = 'Quadruped Simulation'

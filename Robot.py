@@ -10,6 +10,7 @@ import vpyode
 import numpy
 from random import gauss, uniform
 from math import *
+import threading
 
 import Constants as const
 from Graph import Graph
@@ -37,6 +38,7 @@ class Robot:
         self.centerRobot = True
         self.minDeg = const.minDeg
         self.maxDeg = const.maxDeg
+        self.time = 0.5
         # means how many percent of the body do have the density
         # like human body where only 90% is water
         self.bodyCoverage = 1.0
@@ -310,13 +312,13 @@ class Robot:
     def setFemurDensity(self, val):
         '''Sets the density of the femur, considering the percentage it is
            covered with the material''' 
-        self.femurDensity = (float(val)*self.bodyCoverage)
+        self.densityFemur = (float(val)*self.bodyCoverage)
         
         
     def setTibiaDensity(self, val):
         '''Sets the density of the tibia, considering the percentage it is
            covered with the material''' 
-        self.tibiaDensity = (float(val)*self.bodyCoverage)
+        self.densityTibia = (float(val)*self.bodyCoverage)
         
     
     def setFemurLength(self, val):
@@ -397,30 +399,44 @@ class Robot:
     
     def moveForward(self):
         if self.check == 0:
+            t = threading.Timer(self.time, self.moveForward)
+            t.start()
             self.check += 1
             self.setAngle(90, 3)
             self.setAngle(270, 2)
         elif self.check == 1:
+            t = threading.Timer(self.time, self.moveForward)
+            t.start()
             self.check += 1
             self.setAngle(270, 3)
             self.setAngle(90, 0)
         elif self.check == 2:
+            t = threading.Timer(self.time, self.moveForward)
+            t.start()
             self.check += 1
             self.setAngle(90, 7)
             self.setAngle(90, 6)
         elif self.check == 3:
+            t = threading.Timer(self.time, self.moveForward)
+            t.start()
             self.check += 1
             self.setAngle(270, 7)
             self.setAngle(270, 4)
         elif self.check == 4:
+            t = threading.Timer(self.time, self.moveForward)
+            t.start()
             self.check += 1
             self.setAngle(90, 5)
             self.setAngle(90, 4)
         elif self.check == 5:
+            t = threading.Timer(self.time, self.moveForward)
+            t.start()
             self.check += 1
             self.setAngle(270, 5)
             self.setAngle(270, 6)
         elif self.check == 6:
+            t = threading.Timer(self.time, self.moveForward)
+            t.start()
             self.check += 1
             self.setAngle(90, 1)
             self.setAngle(270, 0)
