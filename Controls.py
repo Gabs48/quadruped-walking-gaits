@@ -178,6 +178,19 @@ class tkWindow:
         labelWidth.pack(side=tk.LEFT)
         scaleWidth.pack(side=tk.LEFT)
         scaleWidth.set(const.tibiaWidth)
+        
+        degFrame = tk.Frame(root)
+        degFrame.pack(side=tk.TOP)
+        
+        labelMaxDeg = tk.Label(degFrame, text='Max Degree: ')
+        scaleMaxDeg = tk.Scale(degFrame, orient=tk.HORIZONTAL,
+                               from_=0.01, to=1.0, resolution=0.01,
+                               command=self.sim.cRobot.setTibiaMaxDeg,
+                               length=const.tkCtrlLength, showvalue=1 )
+        
+        labelMaxDeg.pack(side=tk.LEFT)
+        scaleMaxDeg.pack(side=tk.LEFT)
+        scaleMaxDeg.set(const.tibiaDeg)
  
     
     def setupMotionProps(self, root):
