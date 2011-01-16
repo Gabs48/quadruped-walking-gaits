@@ -37,6 +37,7 @@ tarsusHeight = 2.5
 
 minDeg = 0.05
 maxDeg = 0.2
+tibiaDeg = 0.4
 maxAngle = 90
 
 maxSize = 150

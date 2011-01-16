@@ -38,6 +38,7 @@ class Robot:
         self.centerRobot = True
         self.minDeg = const.minDeg
         self.maxDeg = const.maxDeg
+        self.maxTibiaDeg = const.tibiaDeg
         self.time = 0.5
         # means how many percent of the body do have the density
         # like human body where only 90% is water
@@ -114,7 +115,8 @@ class Robot:
                                               self.minDeg, self.maxDeg)
                 self.addHingeJoint(self.tibia[i], self.femur[i],
                                              (tX, tY, tZ),
-                                             (1, 0, 0), const.maxAngle, -0.01, 0.4)
+                                             (1, 0, 0), const.maxAngle, -0.01,
+                                             self.maxTibiaDeg)
             elif i == 1:
                 self.addHingeJoint(self.femur[i], self.body,
                                              (-fX, fY, fZ),
@@ -122,7 +124,8 @@ class Robot:
                                               self.maxDeg, self.minDeg)
                 self.addHingeJoint(self.tibia[i], self.femur[i],
                                              (-tX, tY, tZ),
-                                             (1, 0, 0), const.maxAngle, -0.01, 0.4)
+                                             (1, 0, 0), const.maxAngle, -0.01,
+                                             self.maxTibiaDeg)
             elif i == 2:
                 self.addHingeJoint(self.femur[i], self.body,
                                              (-fX, fY, -fZ),
@@ -130,7 +133,8 @@ class Robot:
                                              self.minDeg, self.maxDeg)
                 self.addHingeJoint(self.tibia[i], self.femur[i],
                                              (-tX, tY, -tZ),
-                                             (-1, 0, 0), const.maxAngle, -0.01, 0.4)
+                                             (-1, 0, 0), const.maxAngle, -0.01,
+                                             self.maxTibiaDeg)
             elif i == 3:
                 self.addHingeJoint(self.femur[i], self.body,
                                              (fX, fY, -fZ),
@@ -138,7 +142,8 @@ class Robot:
                                              self.maxDeg, self.minDeg)
                 self.addHingeJoint(self.tibia[i], self.femur[i],
                                              (tX, tY, -tZ),
-                                             (-1, 0, 0), const.maxAngle, -0.01)
+                                             (-1, 0, 0), const.maxAngle, -0.01,
+                                             self.maxTibiaDeg)
         
         
     def addFixedJoint(self, body1, body2):
@@ -351,6 +356,10 @@ class Robot:
     
     def setMaxDeg(self, val):
         self.maxDeg = float(val)
+        
+        
+    def setTibiaMaxDeg(self, val):
+        self.maxTibiaDeg = float(val)
         
         
     def setBodyCoverage(self, val):
