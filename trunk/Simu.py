@@ -22,6 +22,9 @@ class Simulation:
         self.cWorld = myWorld()
         self.createUI(self.cWorld.world._getScene())
         
+        #self.landscape = e.Heightmap(self.cWorld.world)
+        #self.data = self.landscape.makeWorld()
+        
         self.cRobot = Robot(self.cWorld.world, vpyode._bigSpace, 50)
         self.cCtrl = ControlWindow(self.cWorld.world._getScene(), self.cRobot, self.cWorld)
         
@@ -36,6 +39,7 @@ class Simulation:
         itemcount = 0
         count = random.uniform(10,50)
         random.seed()
+        
         while(1):
             visual.rate(const.framerate) # Frame rate
             
@@ -44,7 +48,7 @@ class Simulation:
             
             # do multiple simulation steps per frame to prevent jittering due to
             # 'small' collisions
-            n = 10
+            n = 6
             
             if itemcount < count:
                 itemcount += 1
@@ -80,6 +84,8 @@ class Simulation:
                         
                     for b in self.bodies:
                         b.UpdateDisplay()
+                        
+                    #self.data.UpdateDisplay()
                         
     def setupWindow(self, scene):
         scene.title = 'Quadruped Simulation'
