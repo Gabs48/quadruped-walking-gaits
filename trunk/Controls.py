@@ -447,7 +447,7 @@ class ControlWindow:
         self.bMotion1 = visual.controls.button(pos=(0,0,0), width=const.ctrlsWidth,
                                    height=24, text='Motion 1', action=lambda: self.robot.moveForward() )
         self.bMotion2 = visual.controls.button(pos=(0,-25,0), width=const.ctrlsWidth,
-                                   height=24, text='Motion 2', action=lambda: self.robot.moveForward() )
+                                   height=24, text='Motion 2', action=lambda: self.robot.moveBackward() )
         self.bMotion3 = visual.controls.button(pos=(0,-50,0), width=const.ctrlsWidth,
                                    height=24, text='Motion 3', action=lambda: self.robot.turnLeft() )
         self.bMotion4 = visual.controls.button(pos=(0,-75,0), width=const.ctrlsWidth,
