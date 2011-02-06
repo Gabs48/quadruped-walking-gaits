@@ -506,8 +506,98 @@ class Robot:
             
 
     def turnLeft(self):
-        pass
-
-
+        if self.check == 0:
+            t = threading.Timer(self.time, self.turnLeft)
+            t.start()
+            self.check += 1
+            self.setAngle(90, 3)
+            self.setAngle(270, 2)
+        elif self.check == 1:
+            t = threading.Timer(self.time, self.turnLeft)
+            t.start()
+            self.check += 1
+            self.setAngle(270, 3)
+            self.setAngle(90, 0)
+        elif self.check == 2:
+            t = threading.Timer(self.time, self.turnLeft)
+            t.start()
+            self.check += 1
+            self.setAngle(90, 5)
+            self.setAngle(270, 4)
+        elif self.check == 3:
+            t = threading.Timer(self.time, self.turnLeft)
+            t.start()
+            self.check += 1
+            self.setAngle(270, 5)
+            self.setAngle(90, 6)
+        elif self.check == 4:
+            t = threading.Timer(self.time, self.turnLeft)
+            t.start()
+            self.check += 1
+            self.setAngle(90, 7)
+            self.setAngle(270, 6)
+        elif self.check == 5:
+            t = threading.Timer(self.time, self.turnLeft)
+            t.start()
+            self.check += 1
+            self.setAngle(270, 7)
+            self.setAngle(90, 4)
+        elif self.check == 6:
+            t = threading.Timer(self.time, self.turnLeft)
+            t.start()
+            self.check += 1
+            self.setAngle(90, 1)
+            self.setAngle(270, 0)
+        elif self.check == 7:
+            self.check = 0
+            self.setAngle(270, 1)
+            self.setAngle(90, 2)
+            
+            
     def turnRight(self):
-        pass
+        if self.check == 0:
+            t = threading.Timer(self.time, self.turnRight)
+            t.start()
+            self.check += 1
+            self.setAngle(90, 1)
+            self.setAngle(90, 0)
+        elif self.check == 1:
+            t = threading.Timer(self.time, self.turnRight)
+            t.start()
+            self.check += 1
+            self.setAngle(270, 1)
+            self.setAngle(270, 2)
+        elif self.check == 2:
+            t = threading.Timer(self.time, self.turnRight)
+            t.start()
+            self.check += 1
+            self.setAngle(90, 7)
+            self.setAngle(90, 6)
+        elif self.check == 3:
+            t = threading.Timer(self.time, self.turnRight)
+            t.start()
+            self.check += 1
+            self.setAngle(270, 7)
+            self.setAngle(270, 4)
+        elif self.check == 4:
+            t = threading.Timer(self.time, self.turnRight)
+            t.start()
+            self.check += 1
+            self.setAngle(90, 5)
+            self.setAngle(90, 4)
+        elif self.check == 5:
+            t = threading.Timer(self.time, self.turnRight)
+            t.start()
+            self.check += 1
+            self.setAngle(270, 5)
+            self.setAngle(270, 6)
+        elif self.check == 6:
+            t = threading.Timer(self.time, self.moveBackward)
+            t.start()
+            self.check += 1
+            self.setAngle(90, 3)
+            self.setAngle(90, 2)
+        elif self.check == 7:
+            self.check = 0
+            self.setAngle(270, 3)
+            self.setAngle(270, 0)
