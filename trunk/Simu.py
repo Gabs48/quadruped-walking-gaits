@@ -22,8 +22,8 @@ class Simulation:
         self.cWorld = myWorld()
         self.createUI(self.cWorld.world._getScene())
         
-        #self.landscape = e.Heightmap(self.cWorld.world)
-        #self.data = self.landscape.makeWorld()
+        self.myWorld = e.Heightmap(self.cWorld.world)
+        self.Terrain = self.myWorld.makeMesh()
         
         self.cRobot = Robot(self.cWorld.world, vpyode._bigSpace, 50)
         self.cCtrl = ControlWindow(self.cWorld.world._getScene(), self.cRobot, self.cWorld)
@@ -33,11 +33,11 @@ class Simulation:
         self.dt = 1.0/const.framerate
         self.refresh = 0
         
-        self.bodies.append(e.drop_object(self.cWorld.world))
+        self.bodies.append(e.drop_object(self.cWorld.world, self.cRobot.center))
     
     def startLoop(self):
         itemcount = 0
-        count = random.uniform(10,50)
+        count = random.uniform(1,5)
         random.seed()
         
         while(1):
@@ -52,10 +52,7 @@ class Simulation:
             
             if itemcount < count:
                 itemcount += 1
-                self.bodies.append(e.drop_object(self.cWorld.world))
-            #elif itemcount >= count and itemcount <= (count+4):
-            #    for b in self.bodies:
-            #        b.addForce([1000000, 1000000, 10000])
+                self.bodies.append(e.drop_object(self.cWorld.world, self.cRobot.center))
                     
             itemcount+=1
             
@@ -69,6 +66,7 @@ class Simulation:
             for i in range(n):           
                 # Simulation step
                 self.cWorld.world.step(self.dt/n)
+            
                 
                 if self.cRobot.bodyExists():
                     self.cRobot.refreshRobot(self.cCtrl.lBody)

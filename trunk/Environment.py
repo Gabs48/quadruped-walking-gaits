@@ -3,6 +3,8 @@ import ode
 import random
 from math import pi
 import vpyode
+import uuid
+from operator import itemgetter
 
    
 # create_box
@@ -19,13 +21,12 @@ def create_box(world, density, lx, ly, lz):
     return body
     
 # drop_objec
-def drop_object(world):
+def drop_object(world, pos):
     """Drop an object into the scene."""
     random.seed()
-    
-    
+
     body = create_box(world, random.uniform(10,100), random.uniform(0.5,6),random.uniform(0.1,0.6),random.uniform(0.5,6))
-    body.setPosition( (random.uniform(-30,0),random.uniform(6,20),random.uniform(-10,10)) )
+    body.setPosition( (random.uniform(-pos[0]-2,pos[0]+22),random.uniform(6,20),random.uniform(-pos[2]-2,pos[2]+2)) )
         
     # Rotate by a random angle about all three axes
     theta = random.uniform(0,2*pi)
@@ -42,24 +43,94 @@ class Heightmap:
     
     def __init__(self, world):
         self.world = world
+        random.seed(str(uuid.uuid1())) # initialize random module
+        width, self.w = 32, 32
+        height, self.h = 32, 32
+        self.gridSize = 1 # size between pixels
+        self.maxHeight = random.uniform(-1,1)
+        self.noise = random.uniform(-1,1) # less noise = higher map
+        self.vertices = []
+        self.faces = []
 
+        self.plasma(0,0, width, height, random.uniform(1, self.maxHeight),
+               random.uniform(1, self.maxHeight), random.uniform(1, self.maxHeight),
+               random.uniform(1, self.maxHeight))
+        self.MakeFaces()
+        
         
     def makeMesh(self):
-        mesh = vpyode.Mesh()
-        VERTICES=[(10,0,10),(10,0,-10),(-10,5,-10),(-10,5,10)] 
-        INDICES=[(2,1,0),(2,1,0)] 
-        mesh.build(VERTICES, INDICES)
-    
-        return mesh
-
-        
+        for face in self.faces:
+            f = visual.faces(pos=face)
+            f.make_normals()
+            f.smooth()
+            f.make_twosided()
+            
+            #tm = ode.TriMeshData()
+            #tm.build([(face[0][0], face[0][1], face[0][2]),
+            #          (face[1][0], face[1][1], face[1][2]),
+            #          (face[2][0], face[2][1], face[2][2])],
+            #           face)
+            
+                    
     def makeWorld(self):
+        bodies = []
         body = vpyode.GDMFrameBody(self.world)
         element = vpyode.GDMElement()
         element.DefineMeshTotal(100.0, (0,0,0), [(0,1,0),(0,1,0),(0,1,0)], self.makeMesh())
         
-        return body
-
+        bodies.append(body)
+        return bodies
     
-    def dropWorld(self):
-        pass
+
+    def plasma(self, x, y, width, height, c1, c2, c3, c4):
+        newWidth = width / 2
+        newHeight = height / 2
+    
+        if (width > self.gridSize or height > self.gridSize):
+            #Randomly displace the midpoint!
+            midPoint = (c1 + c2 + c3 + c4) / 4 + self.Displace(newWidth + newHeight)
+    
+            #Calculate the edges by averaging the two corners of each edge.
+            edge1 = (c1 + c2) / 2
+            edge2 = (c2 + c3) / 2
+            edge3 = (c3 + c4) / 2
+            edge4 = (c4 + c1) / 2
+    
+            x1 = x + newWidth
+            y1 = y + newHeight
+            
+            #Do the operation over again for each of the four new grids.
+            self.plasma(x,            y,             newWidth,   newHeight, c1,        edge1,    midPoint, edge4)
+            self.plasma(x + newWidth, y,             newWidth,   newHeight, edge1,     c2,       edge2,    midPoint)
+            self.plasma(x + newWidth, y + newHeight, newWidth,   newHeight, midPoint,  edge2,    c3,       edge3)
+            self.plasma(x,            y + newHeight, newWidth,   newHeight, edge4,     midPoint, edge3,    c4)     
+        else:
+            #This is the "base case," where each grid piece is less than the size of a pixel.    
+            c = (c1 + c2 + c3 + c4) / 4;
+    
+            hw = (self.w/2)
+            hh = (self.h/2)
+            ch = c/2
+            cc = c/self.maxHeight
+
+            self.vertices.append([(x-hw),(c),(y-hh)]) #center points
+            #self.vertices.append([x,c,y])
+    
+                
+    def Displace(self, num):
+        rand = (random.uniform(1, self.maxHeight) - self.noise)
+        return rand
+    
+    
+    def MakeFaces(self):
+        Res = self.w-1
+        self.vertices = sorted(self.vertices, key=itemgetter(0,2))
+        
+        modCheck, nCheck = 0, 0
+        for n in range(1, len(self.vertices)-self.w):
+            if(n%Res != modCheck or n == nCheck):
+                self.faces.append([self.vertices[n], self.vertices[n+1], self.vertices[(n+1)+Res]])
+                self.faces.append([self.vertices[n+1], self.vertices[(n+2)+Res], self.vertices[(n+1)+Res]])                
+            else:
+                modCheck += 1
+                nCheck += self.w

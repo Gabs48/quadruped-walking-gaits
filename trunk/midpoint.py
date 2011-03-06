@@ -2,7 +2,8 @@
 # original from http://www.ic.sunysb.edu/Stu/jseyster/plasma/ (Justin Seyster)
 import random
 import visual
-from time import sleep
+from operator import itemgetter
+import uuid
 
 def plasma(x, y, width, height, c1, c2, c3, c4):
     newWidth = width / 2
@@ -30,76 +31,55 @@ def plasma(x, y, width, height, c1, c2, c3, c4):
         #This is the "base case," where each grid piece is less than the size of a pixel.    
         c = (c1 + c2 + c3 + c4) / 4;
 
-        #if c < 0:
-        #    c = 0.01
-
         hw = (w/2)
         hh = (h/2)
         ch = c/2
         cc = c/maxHeight
-        '''
-        if c/maxHeight > 0.4 and c/maxHeight < 1:
-            visual.box(frame=f,pos=[(x-hw), ch, (y-hh)],
-                       color=(0,cc,0),
-                       shape="square",
-                       length=gridSize, height=c, width=gridSize)
-        elif c/maxHeight > 1:
-            visual.box(frame=f,pos=[(x-hw), ch, (y-hh)],
-                       color=(cc,cc,0),
-                       shape="square",
-                       length=gridSize, height=c, width=gridSize)            
-        else:
-            visual.box(frame=f,pos=[x-hw, ch, y-hh],
-                      color=(0,0,cc+0.5),
-                      shape="square",
-                      length=gridSize, height=c, width=gridSize)
-        '''
-        points.append([x-hw,c,y-hh])
-
-        if len(points) > 3:
-            mid = (points[0][1] + points[1][1] + points[2][1] + points[3][1])/4
-
-            x1 = ((float(points[0][0]) + float(points[2][0]))/2)
-            y1 = ((float(points[0][2]) + float(points[2][2]))/2)
-            visual.convex(frame=f, pos=[points[0],points[1],points[2],points[3]])
-            '''visual.box(frame=f,pos=[x1, c/2, y1],
-                      color=(cc,0,0),
-                      shape="square",
-                      length=gridSize, height=c, width=gridSize)'''
-            points[:] = []
+        
+	p.append([x-hw,c,y-hh])
             
 def Displace(num):
     rand = (random.uniform(1, maxHeight) - noise)
     return rand
 
 
-global gridSize, gamma, points, maxHeight, points, w, h, f
-random.seed('Albert Einstein was a German theoretical physicist.')
+global gridSize, gamma, points, p, maxHeight, points, w, h, f
+random.seed(str(uuid.uuid1()))
 f = visual.frame()
-points=[]
-width, w = 1000, 1000
-noise = random.uniform(1,27) # less noise = higher map
-height, h = 1000, 1000
-gridSize = 10 # size between pixels
-maxHeight = random.uniform(1,20)
-#points.append([width-100,0,height-100])
-#points.append([0-100,0,height-100])
-#points.append([width-100,0,0-100])
-#points.append([0-100,0,0-100])
+p = []
+width, w = 32, 32
+noise = random.uniform(1,1) # less noise = higher map
+height, h = 32, 32
+gridSize = 1 # size between pixels
+maxHeight = random.uniform(1,5)
 
-lamp = visual.local_light(pos=(0,70,0), color=visual.color.gray(0.8))
-#visual.convex(frame=f, pos=[(w/2,0,h/2),(w/2,0,-h/2),(-w/2,0,h/2),(-w/2,0,-h/2)])
 plasma(0,0, width, height, random.uniform(1, maxHeight), random.uniform(1, maxHeight), random.uniform(1, maxHeight), random.uniform(1, maxHeight))
 
-r = 0.01
+p = sorted(p, key=itemgetter(0,2))
+print len(p)
 
-while 1:
-    visual.rate(25)
-    if r < 1:
-        f.rotate(angle=-0.0439822971503,axis=(r,1,0))
-        r += 0.01
+Res = w-1
+
+modCheck = 0
+nCheck = 0
+for n in range(1, len(p)-w):
+    if(n%Res != modCheck or n == nCheck):
+	f1 = visual.faces(frame=f, pos=[
+                           p[n],
+                           p[n+1],
+			   p[(n+1)+Res]])
+	f2 = visual.faces(frame=f, pos=[
+                           p[n+1],
+                           p[(n+2)+Res],
+			   p[(n+1)+Res]])
+    
+	f1.make_normals()
+	f1.smooth()
+	f1.make_twosided()
+	f2.make_normals()
+	f2.smooth()
+	f2.make_twosided()
+	
     else:
-        f.rotate(angle=-0.0439822971503,axis=(r,1,0))
-        r -= 0.01
-
-
+	modCheck += 1
+	nCheck += w
