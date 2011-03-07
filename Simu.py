@@ -23,7 +23,7 @@ class Simulation:
         self.createUI(self.cWorld.world._getScene())
         
         self.myWorld = e.Heightmap(self.cWorld.world)
-        self.Terrain = self.myWorld.makeMesh()
+        self.Terrain = self.myWorld.makeWorld()
         
         self.cRobot = Robot(self.cWorld.world, vpyode._bigSpace, 50)
         self.cCtrl = ControlWindow(self.cWorld.world._getScene(), self.cRobot, self.cWorld)
@@ -66,7 +66,8 @@ class Simulation:
             for i in range(n):           
                 # Simulation step
                 self.cWorld.world.step(self.dt/n)
-            
+                
+                #self.Terrain.UpdateDisplay()
                 
                 if self.cRobot.bodyExists():
                     self.cRobot.refreshRobot(self.cCtrl.lBody)
@@ -83,7 +84,6 @@ class Simulation:
                     for b in self.bodies:
                         b.UpdateDisplay()
                         
-                    #self.data.UpdateDisplay()
                         
     def setupWindow(self, scene):
         scene.title = 'Quadruped Simulation'

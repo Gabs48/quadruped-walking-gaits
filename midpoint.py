@@ -35,6 +35,10 @@ def plasma(x, y, width, height, c1, c2, c3, c4):
         hh = (h/2)
         ch = c/2
         cc = c/maxHeight
+
+        if (c > 0.5) and (c < 1.0):
+            c = 0
+            print 'yuhu'
         
 	p.append([x-hw,c,y-hh])
             
@@ -47,11 +51,12 @@ global gridSize, gamma, points, p, maxHeight, points, w, h, f
 random.seed(str(uuid.uuid1()))
 f = visual.frame()
 p = []
-width, w = 32, 32
-noise = random.uniform(1,1) # less noise = higher map
-height, h = 32, 32
+width, w = 128, 128
+noise = random.uniform(-1,5) # less noise = higher map
+height, h = 128, 128
 gridSize = 1 # size between pixels
 maxHeight = random.uniform(1,5)
+
 
 plasma(0,0, width, height, random.uniform(1, maxHeight), random.uniform(1, maxHeight), random.uniform(1, maxHeight), random.uniform(1, maxHeight))
 
@@ -67,11 +72,11 @@ for n in range(1, len(p)-w):
 	f1 = visual.faces(frame=f, pos=[
                            p[n],
                            p[n+1],
-			   p[(n+1)+Res]])
+			   p[(n+1)+Res]] )
 	f2 = visual.faces(frame=f, pos=[
                            p[n+1],
                            p[(n+2)+Res],
-			   p[(n+1)+Res]])
+			   p[(n+1)+Res]] )
     
 	f1.make_normals()
 	f1.smooth()

@@ -47,9 +47,10 @@ class Heightmap:
         width, self.w = 32, 32
         height, self.h = 32, 32
         self.gridSize = 1 # size between pixels
-        self.maxHeight = random.uniform(-1,1)
-        self.noise = random.uniform(-1,1) # less noise = higher map
+        self.maxHeight = random.uniform(0,2)
+        self.noise = random.uniform(0,2) # less noise = higher map
         self.vertices = []
+        self.indices = []
         self.faces = []
 
         self.plasma(0,0, width, height, random.uniform(1, self.maxHeight),
@@ -58,29 +59,22 @@ class Heightmap:
         self.MakeFaces()
         
         
-    def makeMesh(self):
-        for face in self.faces:
-            f = visual.faces(pos=face)
-            f.make_normals()
-            f.smooth()
-            f.make_twosided()
-            
-            #tm = ode.TriMeshData()
-            #tm.build([(face[0][0], face[0][1], face[0][2]),
-            #          (face[1][0], face[1][1], face[1][2]),
-            #          (face[2][0], face[2][1], face[2][2])],
-            #           face)
-            
-                    
+    def makeMesh(self):           
+        mesh = vpyode.Mesh()
+        mesh.build(self.vertices, self.indices, self.faces)
+
+        return mesh
+
+        
     def makeWorld(self):
-        bodies = []
         body = vpyode.GDMFrameBody(self.world)
         element = vpyode.GDMElement()
-        element.DefineMeshTotal(100.0, (0,0,0), [(0,1,0),(0,1,0),(0,1,0)], self.makeMesh())
+        mesh = self.makeMesh()
+        element.DefineMeshTotal(100.0, (0,0,0), self.faces[0], mesh)
+        body.AddGDMElement('Mesh', element)
         
-        bodies.append(body)
-        return bodies
-    
+        return body    
+
 
     def plasma(self, x, y, width, height, c1, c2, c3, c4):
         newWidth = width / 2
@@ -113,8 +107,11 @@ class Heightmap:
             ch = c/2
             cc = c/self.maxHeight
 
-            self.vertices.append([(x-hw),(c),(y-hh)]) #center points
-            #self.vertices.append([x,c,y])
+            if (c > 0.5) and (c < 1.0):
+                c = 0
+
+            self.vertices.append([(x-hw),c,(y-hh)]) #center points
+            #self.vertices.append([(x),(c),(y)])
     
                 
     def Displace(self, num):
@@ -130,7 +127,9 @@ class Heightmap:
         for n in range(1, len(self.vertices)-self.w):
             if(n%Res != modCheck or n == nCheck):
                 self.faces.append([self.vertices[n], self.vertices[n+1], self.vertices[(n+1)+Res]])
-                self.faces.append([self.vertices[n+1], self.vertices[(n+2)+Res], self.vertices[(n+1)+Res]])                
+                self.faces.append([self.vertices[n+1], self.vertices[(n+2)+Res], self.vertices[(n+1)+Res]])
+                self.indices.append([n, n+1, (n+1)+Res])
+                self.indices.append([n+1, (n+2)+Res, (n+1)+Res])
             else:
                 modCheck += 1
                 nCheck += self.w
