@@ -4,6 +4,7 @@ Description: Simulation of Quadruped Robot using ODE and VPython
 
 PyOde: http://pyode.sourceforge.net
 VPython: http://www.vpython.org
+NOTE: Changed some things, therefore the version is not compatible anymore
 VPyOde: http://www.missioncognition.net/visualpyode/
 
 CGKit(Rendering): http://cgkit.sourceforge.net/

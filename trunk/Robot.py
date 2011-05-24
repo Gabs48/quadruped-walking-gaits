@@ -592,7 +592,7 @@ class Robot:
             self.setAngle(270, 5)
             self.setAngle(270, 6)
         elif self.check == 6:
-            t = threading.Timer(self.time, self.moveBackward)
+            t = threading.Timer(self.time, self.turnRight)
             t.start()
             self.check += 1
             self.setAngle(90, 3)
