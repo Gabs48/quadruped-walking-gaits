@@ -22,8 +22,9 @@ class Simulation:
         self.cWorld = myWorld()
         self.createUI(self.cWorld.world._getScene())
         
-        self.myWorld = e.Heightmap(self.cWorld.world)
-        self.Terrain = self.myWorld.makeWorld()
+        # terrain for future implementation
+        #self.myWorld = e.Heightmap(self.cWorld.world)
+        #self.Terrain = self.myWorld.makeWorld()
         
         self.cRobot = Robot(self.cWorld.world, vpyode._bigSpace, 50)
         self.cCtrl = ControlWindow(self.cWorld.world._getScene(), self.cRobot, self.cWorld)
@@ -37,7 +38,7 @@ class Simulation:
     
     def startLoop(self):
         itemcount = 0
-        count = random.uniform(1,5)
+        count = random.uniform(1,50)
         random.seed()
         
         while(1):
@@ -67,6 +68,7 @@ class Simulation:
                 # Simulation step
                 self.cWorld.world.step(self.dt/n)
                 
+                # terrain for future implementation
                 #self.Terrain.UpdateDisplay()
                 
                 if self.cRobot.bodyExists():

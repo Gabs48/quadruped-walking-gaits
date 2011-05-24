@@ -7,7 +7,7 @@ import uuid
 from operator import itemgetter
 
    
-# create_box
+
 def create_box(world, density, lx, ly, lz):
     """Create a box body and its corresponding geom."""
     
@@ -19,14 +19,26 @@ def create_box(world, density, lx, ly, lz):
     body.AddGDMElement('Box', element)
     
     return body
+
+def create_cylinder(world, density, radius, length):
+    '''Create a cylinder body and its corresponding geom.'''
+    body = vpyode.GDMFrameBody(world)
+    element = vpyode.GDMElement()
+    element.DefineCylinder(density, radius, length)
+    element.GetDisplayObject().color = (random.uniform(0,1),random.uniform(0,1), random.uniform(0,1))
+    body.AddGDMElement('Cylinder', element)
     
-# drop_objec
+    return body
+    
 def drop_object(world, pos):
     """Drop an object into the scene."""
-    random.seed()
-
+    random.seed(str(uuid.uuid1()))
+    
     body = create_box(world, random.uniform(10,100), random.uniform(0.5,6),random.uniform(0.1,0.6),random.uniform(0.5,6))
-    body.setPosition( (random.uniform(-pos[0]-2,pos[0]+22),random.uniform(6,20),random.uniform(-pos[2]-2,pos[2]+2)) )
+    x = pos[0] + random.uniform(-pos[0]-12,pos[0]+12)
+    y = random.uniform(6,20)
+    z = pos[2] + random.uniform(-pos[2]-12,pos[2]+12)
+    body.setPosition( (x, y, z) )
         
     # Rotate by a random angle about all three axes
     theta = random.uniform(0,2*pi)

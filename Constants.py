@@ -1,7 +1,8 @@
 '''
 Author: Martin Stolle
 
-Description: Constains some commenly used values that are not likely to changed
+Description: Constants, some commenly used values that are not likely to changed
+             that need there own namespace
 '''
 
 framerate = 25

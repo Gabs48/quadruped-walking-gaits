@@ -1,5 +1,5 @@
 '''
-Author: "Xevel" alias Nicolas SAUGNIER 
+Original Author: "Xevel" alias Nicolas SAUGNIER
 
 Description: Ground grid
 '''
